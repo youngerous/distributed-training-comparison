@@ -50,7 +50,7 @@ And I did not care detailed hyperparameter settings, so you can change some sett
 | CIFAR-100 | ResNet-18 | **1.2022** | **71.89%** | **92.08%** |     DistributedDataParallel (DDP)     |
 
 - Experiment results are averaged value of random seed 2, 4, 42.
-- Automatic Mixed Precision(AMP) is applied with every experiment.
+- Automatic Mixed Precision(AMP) is applied to every experiment.
 
 ## Reference
 - [[Docs] Distributed Communication Package - torch.distributed](https://pytorch.org/docs/stable/distributed.html#)
