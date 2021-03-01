@@ -42,11 +42,12 @@ Using two GPU machines, I doubled global batch size in DDP training. Best model 
 
 And I did not care detailed hyperparameter settings, so you can change some settings in order to improve performance (i.e. using ADAM optimizer).
 
-|  Dataset  |   Model   | Test Loss  | Top-1 Acc  | Top-5 Acc  |            Method             |
-| :-------: | :-------: | :--------: | :--------: | :--------: | :---------------------------: |
-| CIFAR-100 | ResNet-18 |   1.4799   |   64.79%   |   89.15%   |            Single             |
-| CIFAR-100 | ResNet-18 |   1.2234   |   71.17%   |   91.72%   |       DataParallel (DP)       |
-| CIFAR-100 | ResNet-18 | **1.2022** | **71.89%** | **92.08%** | DistributedDataParallel (DDP) |
+|  Dataset  |   Model   | Test Loss  | Top-1 Acc  | Top-5 Acc  |                Method                 |
+| :-------: | :-------: | :--------: | :--------: | :--------: | :-----------------------------------: |
+| CIFAR-100 | ResNet-18 |   1.4799   |   64.79%   |   89.15%   |                Single                 |
+| CIFAR-100 | ResNet-18 |   1.2234   |   71.17%   |   91.72%   | DataParallel (DP) with 128 batch size |
+| CIFAR-100 | ResNet-18 |   1.3436   |   70.92%   |   91.70%   | DataParallel (DP) with 256 batch size |
+| CIFAR-100 | ResNet-18 | **1.2022** | **71.89%** | **92.08%** |     DistributedDataParallel (DDP)     |
 
 - Experiment results are averaged value of random seed 2, 4, 42.
 - Automatic Mixed Precision(AMP) is applied with every experiment.
