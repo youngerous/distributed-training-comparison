@@ -1,6 +1,9 @@
 checkpoints/
 data/
 result.csv
+single.txt
+dp.txt
+ddp.txt
 
 # Created by https://www.toptal.com/developers/gitignore/api/macos,windows,python,jupyternotebooks
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,windows,python,jupyternotebooks
