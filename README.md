@@ -25,15 +25,15 @@ All three folders - ```src/single/```, ```src/dp/```, and ```src/ddp/``` - are i
 
 ### Single
 ```sh
-$ sh src/run_single.sh
+$ sh src/single/run_single.sh
 ```
 ### DataParallel
 ```sh
-$ sh src/run_dp.sh
+$ sh src/dp/run_dp.sh
 ```
 ### DistributedDataParallel
 ```sh
-$ sh src/run_ddp.sh
+$ sh src/ddp/run_ddp.sh
 ```
 
 ## Result
