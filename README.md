@@ -21,19 +21,19 @@ In this repo, I compared **single-device(1)** with **single-machine multi-GPU Da
 All dependencies are written in [requirements.txt](https://github.com/youngerous/distributed-training-comparison/blob/main/requirements.txt), and you can also access through [Dockerfile](https://github.com/youngerous/distributed-training-comparison/blob/main/Dockerfile).
 
 ## How to Run
-All three folders - ```src/single/```, ```src/dp/```, and ```src/ddp/``` - are independent structure.
+All three folders - ```src/single/```, ```src/dp/```, and ```src/ddp/``` - are independent structures.
 
-### Baseline
+### Single
 ```sh
-$ sh scripts/run_baseline.sh
+$ sh src/single/run_single.sh
 ```
 ### DataParallel
 ```sh
-$ sh scripts/run_dp.sh
+$ sh src/dp/run_dp.sh
 ```
 ### DistributedDataParallel
 ```sh
-$ sh scripts/run_ddp.sh
+$ sh src/ddp/run_ddp.sh
 ```
 
 ## Result
