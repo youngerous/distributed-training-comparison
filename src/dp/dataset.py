@@ -31,7 +31,7 @@ def get_trn_val_loader(
     :param num_workers: number of subprocesses to use when loading the dataset.
     :param pin_memory: whether to copy tensors into CUDA pinned memory.
                         Set it to True if using GPU.
-    :param ddgsd: whether to apply ddgsd.
+
     :return train_loader: training set iterator.
     :return valid_loader: validation set iterator.
     """
@@ -124,6 +124,7 @@ def get_tst_loader(
     :param num_workers: number of subprocesses to use when loading the dataset.
     :param pin_memory: whether to copy tensors into CUDA pinned memory.
                         Set it to True if using GPU.
+
     :return data_loader: test set iterator.
     """
     normalize = transforms.Normalize(
