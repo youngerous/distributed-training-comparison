@@ -37,25 +37,26 @@ $ sh scripts/run_ddp.sh
 ```
 
 ## Result
-Using two GPU machines, I doubled global batch size in DDP training. Best model is selected according to validation top-1 accuracy.
+Batch size is set to 128 or 256. It is recommended to use [SyncBatchNorm](https://pytorch.org/docs/stable/generated/torch.nn.SyncBatchNorm.html) in DDP training, but I used vanila BatchNorm so just trained on 256 batch size. Best model is selected according to validation top-1 accuracy.
 
 
 And I did not care detailed hyperparameter settings, so you can change some settings in order to improve performance (i.e. using ADAM optimizer).
 
-|  Dataset  |   Model   | Test Loss  | Top-1 Acc  | Top-5 Acc  |                Method                 |
-| :-------: | :-------: | :--------: | :--------: | :--------: | :-----------------------------------: |
-| CIFAR-100 | ResNet-18 |   1.4799   |   64.79%   |   89.15%   |                Single                 |
-| CIFAR-100 | ResNet-18 |   1.2234   |   71.17%   |   91.72%   | DataParallel (DP) with 128 batch size |
-| CIFAR-100 | ResNet-18 |   1.3436   |   70.92%   |   91.70%   | DataParallel (DP) with 256 batch size |
-| CIFAR-100 | ResNet-18 | **1.2022** | **71.89%** | **92.08%** |     DistributedDataParallel (DDP)     |
+|  Dataset  |   Model   | Test Loss  | Top-1 Acc  | Top-5 Acc  | Batch Size |            Method             |
+| :-------: | :-------: | :--------: | :--------: | :--------: | :--------: | :---------------------------: |
+| CIFAR-100 | ResNet-18 |   1.4799   |   64.79%   |   89.15%   |    128     |            Single             |
+| CIFAR-100 | ResNet-18 |   1.3270   |   70.45%   |   91.30%   |    256     |            Single             |
+| CIFAR-100 | ResNet-18 |   1.2234   |   71.17%   |   91.72%   |    128     |       DataParallel (DP)       |
+| CIFAR-100 | ResNet-18 |   1.3436   |   70.92%   |   91.70%   |    256     |       DataParallel (DP)       |
+| CIFAR-100 | ResNet-18 | **1.2079** | **71.37%** | **92.08%** |    256     | DistributedDataParallel (DDP) |
 
 - Experiment results are averaged value of random seed 2, 4, 42.
 - Automatic Mixed Precision(AMP) is applied to every experiment.
 
 ## Reference
 - [[Docs] Distributed Communication Package - torch.distributed](https://pytorch.org/docs/stable/distributed.html#)
-- [[Post] Technologies behind Distributed Deep Learning: AllReduce](https://tech.preferred.jp/en/blog/technologies-behind-distributed-deep-learning-allreduce/)
-- [[Post] PyTorch Distributed Training](https://leimao.github.io/blog/PyTorch-Distributed-Training/)
-- [[Post] Distributed data parallel training in Pytorch](https://yangkky.github.io/2019/07/08/distributed-pytorch-tutorial.html)
+- [[Post] Technologies behind Distributed Deep Learning - AllReduce :: Keisuke Fukuda](https://tech.preferred.jp/en/blog/technologies-behind-distributed-deep-learning-allreduce/)
+- [[Post] PyTorch Distributed Training :: leimao blog](https://leimao.github.io/blog/PyTorch-Distributed-Training/)
+- [[Post] Distributed data parallel training in Pytorch :: yangkky blog](https://yangkky.github.io/2019/07/08/distributed-pytorch-tutorial.html)
 - [[Repo] PyTorch Official Example](https://github.com/pytorch/examples/blob/master/imagenet/main.py)
-- [[Repo] pytorch-distributed](https://github.com/tczhangzhi/pytorch-distributed)
+- [[Repo] pytorch-distributed :: tczhangzhi](https://github.com/tczhangzhi/pytorch-distributed)
