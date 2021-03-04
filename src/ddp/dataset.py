@@ -6,28 +6,10 @@ Create train, valid, test iterators for CIFAR-100 [1].
 
 import numpy as np
 import torch
+from torch.utils.data import Subset
 from torch.utils.data.distributed import DistributedSampler
 from torch.utils.data.sampler import SubsetRandomSampler
 from torchvision import datasets, transforms
-
-
-class DistributedIndicesWrapper(torch.utils.data.Dataset):
-    """
-    Utility wrapper so that torch.utils.data.distributed.DistributedSampler can work with train test splits
-
-    Ref: https://discuss.pytorch.org/t/how-to-use-my-own-sampler-when-i-already-use-distributedsampler/62143
-    """
-
-    def __init__(self, dataset: torch.utils.data.Dataset, indices: list):
-        self.dataset = dataset
-        self.indices = indices
-
-    def __len__(self):
-        return len(self.indices)
-
-    def __getitem__(self, item):
-        idx = self.indices[item]
-        return self.dataset[idx]
 
 
 def get_trn_val_loader(
@@ -51,7 +33,7 @@ def get_trn_val_loader(
     :param num_workers: number of subprocesses to use when loading the dataset.
     :param pin_memory: whether to copy tensors into CUDA pinned memory.
                         Set it to True if using GPU.
-    :param ddgsd: whether to apply ddgsd.
+
     :return train_loader: training set iterator.
     :return valid_loader: validation set iterator.
     """
@@ -108,10 +90,12 @@ def get_trn_val_loader(
         np.random.shuffle(indices)
 
     train_idx, valid_idx = indices[split:], indices[:split]
-    train_sampler = DistributedSampler(
-        DistributedIndicesWrapper(train_dataset, train_idx),
-    )
-    valid_sampler = SubsetRandomSampler(valid_idx)
+
+    # split indice explicitly before DistributedSampler
+    train_dataset = Subset(train_dataset, train_idx)
+    valid_dataset = Subset(valid_dataset, valid_idx)
+
+    train_sampler = DistributedSampler(train_dataset)
 
     train_loader = torch.utils.data.DataLoader(
         train_dataset,
@@ -120,12 +104,11 @@ def get_trn_val_loader(
         num_workers=num_workers,
         pin_memory=pin_memory,
         drop_last=True,
-        shuffle=False,  # False if DistributedSampler exists
+        shuffle=(train_sampler is None),
     )
     valid_loader = torch.utils.data.DataLoader(
         valid_dataset,
         batch_size=batch_size,
-        sampler=valid_sampler,
         num_workers=num_workers,
         pin_memory=pin_memory,
     )
@@ -150,6 +133,7 @@ def get_tst_loader(
     :param num_workers: number of subprocesses to use when loading the dataset.
     :param pin_memory: whether to copy tensors into CUDA pinned memory.
                         Set it to True if using GPU.
+
     :return data_loader: test set iterator.
     """
     normalize = transforms.Normalize(
