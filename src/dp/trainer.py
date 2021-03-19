@@ -125,6 +125,7 @@ class Trainer:
         ):
             img, label = map(lambda x: x.to(self.device), batch)
 
+            self.optimizer.zero_grad()
             if self.hparams.amp:
                 with torch.cuda.amp.autocast():
                     logit = self.model(img)

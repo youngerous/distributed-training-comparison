@@ -11,7 +11,7 @@ def load_config():
 
     parser.add_argument("--seed", type=int, default=42, help="Seed for reproducibility")
     parser.add_argument("--workers", type=int, default=4)
-    parser.add_argument("--eval-step", type=int, default=100)
+    parser.add_argument("--eval-step", type=int, default=300)
     parser.add_argument(
         "--amp", action="store_true", default=False, help="PyTorch(>=1.6.x) AMP"
     )

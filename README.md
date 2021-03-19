@@ -44,11 +44,11 @@ And I did not care detailed hyperparameter settings, so you can change some sett
 
 |  Dataset  |   Model   | Test Loss  | Top-1 Acc  | Top-5 Acc  | Batch Size |            Method             |
 | :-------: | :-------: | :--------: | :--------: | :--------: | :--------: | :---------------------------: |
-| CIFAR-100 | ResNet-18 |   1.4799   |   64.79%   |   89.15%   |    128     |            Single             |
-| CIFAR-100 | ResNet-18 |   1.3270   |   70.45%   |   91.30%   |    256     |            Single             |
-| CIFAR-100 | ResNet-18 |   1.2234   |   71.17%   |   91.72%   |    128     |       DataParallel (DP)       |
-| CIFAR-100 | ResNet-18 |   1.3436   |   70.92%   |   91.70%   |    256     |       DataParallel (DP)       |
-| CIFAR-100 | ResNet-18 | **1.2079** | **71.37%** | **92.08%** |    256     | DistributedDataParallel (DDP) |
+| CIFAR-100 | ResNet-18 |   1.3728   |   70.99%   |   91.57%   |    128     |            Single             |
+| CIFAR-100 | ResNet-18 |   1.3394   |   70.64%   |   91.60%   |    256     |            Single             |
+| CIFAR-100 | ResNet-18 |   1.2974   | **71.48%** |   91.65%   |    128     |       DataParallel (DP)       |
+| CIFAR-100 | ResNet-18 |   1.3373   |   71.20%   |   91.53%   |    256     |       DataParallel (DP)       |
+| CIFAR-100 | ResNet-18 | **1.2268** |   71.17%   | **91.84%** |    256     | DistributedDataParallel (DDP) |
 
 - Experiment results are averaged value of random seed 2, 4, 42.
 - Automatic Mixed Precision(AMP) is applied to every experiment.

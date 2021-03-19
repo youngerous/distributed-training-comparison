@@ -113,7 +113,9 @@ class Trainer:
         self.global_top1_acc = val_acc
 
     def fit(self) -> dict:
-        for epoch in tqdm(range(self.hparams.epoch), desc="epoch"):
+        for epoch in tqdm(
+            range(self.hparams.epoch), desc="epoch", disable=self.rank not in [0]
+        ):
             self.train_sampler.set_epoch(epoch)
 
             tqdm.write(f"* Learning Rate: {self.optimizer.param_groups[0]['lr']:.5f}")
@@ -136,9 +138,11 @@ class Trainer:
             enumerate(self.train_loader),
             desc="train_steps",
             total=len(self.train_loader),
+            disable=self.rank in [0],
         ):
             img, label = map(lambda x: x.to(self.device, non_blocking=True), batch)
 
+            self.optimizer.zero_grad()
             if self.hparams.amp:
                 with torch.cuda.amp.autocast():
                     logit = self.model(img)
