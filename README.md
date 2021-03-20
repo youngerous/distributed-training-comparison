@@ -40,7 +40,7 @@ $ sh src/ddp/run_ddp.sh
 Batch size is set to 128 or 256. It is recommended to use [SyncBatchNorm](https://pytorch.org/docs/stable/generated/torch.nn.SyncBatchNorm.html) in DDP training, but I used vanila BatchNorm so just trained on 256 batch size. Best model is selected according to validation top-1 accuracy.
 
 
-And I did not care detailed hyperparameter settings, so you can change some settings in order to improve performance (i.e. using ADAM optimizer).
+And I did not care detailed hyperparameter settings, so you can change some settings in order to improve performance (e.g. using ADAM optimizer).
 
 |  Dataset  |   Model   | Test Loss  | Top-1 Acc  | Top-5 Acc  | Batch Size |            Method             |
 | :-------: | :-------: | :--------: | :--------: | :--------: | :--------: | :---------------------------: |
