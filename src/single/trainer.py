@@ -1,4 +1,5 @@
 import glob
+import logging
 import os
 import random
 from typing import *
@@ -61,6 +62,11 @@ class Trainer:
         self.global_val_loss = 1e5
         self.global_top1_acc = 0
         self.eval_step = hparams.eval_step
+        logging.basicConfig(
+            filename=os.path.join(self.save_path, "experiment.log"),
+            level=logging.INFO,
+            format="%(asctime)s > %(message)s",
+        )
         with open(
             os.path.join(self.save_path, "hparams.yaml"), "w", encoding="utf8"
         ) as outfile:
@@ -88,7 +94,7 @@ class Trainer:
         return optimizer, scheduler
 
     def save_checkpoint(self, epoch: int, val_acc: float, model: nn.Module) -> None:
-        tqdm.write(
+        logging.info(
             f"Val acc increased ({self.global_top1_acc:.4f} → {val_acc:.4f}). Saving model ..."
         )
         new_path = os.path.join(
@@ -102,7 +108,7 @@ class Trainer:
 
     def fit(self) -> dict:
         for epoch in tqdm(range(self.hparams.epoch), desc="epoch"):
-            tqdm.write(f"* Learning Rate: {self.optimizer.param_groups[0]['lr']:.5f}")
+            logging.info(f"* Learning Rate: {self.optimizer.param_groups[0]['lr']:.5f}")
             result = self._train_epoch(epoch)
 
             # update checkpoint
@@ -142,7 +148,7 @@ class Trainer:
 
             self.global_step += 1
             if self.global_step % self.eval_step == 0:
-                tqdm.write(
+                logging.info(
                     f"[Single Version {self.version} Epoch {epoch}] global step: {self.global_step}, train loss: {loss.item():.3f}"
                 )
 
@@ -160,7 +166,7 @@ class Trainer:
             "loss/epoch", {"val": val_loss, "train": train_loss}, epoch
         )
         self.summarywriter.add_scalars("acc/epoch", {"val": val_acc}, epoch)
-        tqdm.write(
+        logging.info(
             f"** global step: {self.global_step}, val loss: {val_loss:.3f}, val_acc: {val_acc:.2f}%"
         )
 
