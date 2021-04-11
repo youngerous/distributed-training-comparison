@@ -14,7 +14,7 @@ from torch.nn.parallel import DistributedDataParallel as DDP
 from tqdm import tqdm
 
 from dataset import get_trn_val_loader, get_tst_loader
-from utils import AverageMeter, accuracy, reduce_mean
+from utils import AverageMeter, accuracy
 
 
 class Trainer:
@@ -154,25 +154,23 @@ class Trainer:
                     logit = self.model(img)
                     loss = self.criterion(logit, label)
                 dist.barrier()
-                reduced_loss = reduce_mean(loss, self.nprocs)
-                self.scaler.scale(reduced_loss).backward()
+                self.scaler.scale(loss).backward()
                 self.scaler.step(self.optimizer)
                 self.scaler.update()
             else:
                 logit = self.model(img)
                 loss = self.criterion(logit, label)
                 dist.barrier()
-                reduced_loss = reduce_mean(loss, self.nprocs)
-                reduced_loss.backward()
+                loss.backward()
                 self.optimizer.step()
 
-            train_loss.update(reduced_loss.item())
+            train_loss.update(loss.item())
 
             if self.rank == 0:
                 self.global_step += 1
                 if self.global_step % self.eval_step == 0:
                     logging.info(
-                        f"[DDP Version {self.version} Epoch {epoch}] global step: {self.global_step}, train loss: {reduced_loss.item():.3f}"
+                        f"[DDP Version {self.version} Epoch {epoch}] global step: {self.global_step}, train loss: {loss.item():.3f}"
                     )
 
         train_loss = train_loss.avg

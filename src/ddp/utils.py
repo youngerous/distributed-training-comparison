@@ -5,14 +5,6 @@ import torch
 import torch.distributed as dist
 
 
-def reduce_mean(tensor: torch.Tensor, nprocs: int) -> torch.Tensor:
-    """ Aggregating results of each rank in DDP training """
-    rt = tensor.clone()
-    dist.all_reduce(rt, op=dist.ReduceOp.SUM)
-    rt /= nprocs
-    return rt
-
-
 def fix_seed(seed: int) -> None:
     torch.manual_seed(seed)
     torch.cuda.manual_seed(seed)
